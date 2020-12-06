@@ -1,4 +1,22 @@
-<!DOCTYPE html>
-<html>
-text
-</html>
+// Type to change the letter in the
+ // center of the canvas.
+ // If you reload the page, it will
+ // still display the last key you entered
+let myText;
+function setup() {
+   createCanvas(500, 500);
+   myText = getItem('myText');
+   if (myText === null) {
+     myText = '';
+   }
+ }
+function draw() {
+   textSize(40);
+   background(255);
+  textAlign(CENTER, CENTER)
+   text(myText, width / 2, height / 2);
+ }
+function keyPressed() {
+   myText = myText + key;
+   storeItem('myText', myText);
+ }
