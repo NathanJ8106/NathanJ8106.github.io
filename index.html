@@ -1,25 +1,110 @@
 <!DOCTYPE html>
 <html>
- <body>
-  <pre>
-  let myText;
+<head>
+<title>Page Title</title>
+
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
+<script>
+	var rotation = [0, 0];
+var camXYZ = [0, -10, 0]
+
+var blockSize = 100;
+
+//colors
+var redCol = [255, 0, 0]
+var blueCol = [0, 0, 255]
+var greenCol = [0, 255, 0]
+var yellowCol = [255, 255, 0]
+
+//x, y, z, color
+var blockData = [0, 1, 0, redCol, 1, 1, 0,greenCol, 0, 1, -1, blueCol, 1, 1, -1, yellowCol]
+
+//setup
+{
+  for(var n = -20; n < 20; n++) {
+    for(var i = -20; i < 20; i++) {
+      blockData[blockData.length] = n
+      blockData[blockData.length] = 0
+      blockData[blockData.length] = i
+      blockData[blockData.length] = greenCol
+    }
+  }
+}
+
+var speed = 20;
+var cameraDistance = 5
+var sensi = 60
+
+function block(x, y, z, color) {
+  y *= -1
+  x -= camXYZ[0]
+  y -= camXYZ[1]
+  z -= camXYZ[2]
+      
+  fill(color)
+  translate(x * blockSize, y * blockSize, z * blockSize)
+  box(blockSize)
+  translate(-x * blockSize, -y * blockSize, -z * blockSize)
+}
+
+function runSaveCode() {
+  for(var n = 0; n < blockData.length / 4; n++) {
+    var x = blockData[n * 4 + 0]
+    var y = blockData[n * 4 + 1]
+    var z = blockData[n * 4 + 2]
+    var color = blockData[n * 4 + 3]
+    block(x, y, z, color)
+  }
+}
+
+
 function setup() {
-   createCanvas(500, 500);
-   myText = getItem('myText');
-   if (myText === null) {
-     myText = '';
-   }
- }
+  createCanvas(500, 500, WEBGL);
+  angleMode(DEGREES);
+  
+  
+}
+
 function draw() {
-   textSize(40);
-   background(255);
-   textAlign(CENTER, CENTER);
-   text(myText, width / 2, height / 2);
- }
+  translate(width/600, width/600)
+  background(185);
+  stroke(0, 0, 0)
+  
+  camera(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0)
+  
+  rotateX(rotation[1] / 2);
+  rotateY(rotation[0] / 2);
+  
+  runSaveCode()
+  
+  if(keyIsPressed) {
+    if(keyCode === 37) {
+      camXYZ[0] -= speed / 100
+    }
+    if(keyCode === 39) {
+      camXYZ[0] += speed / 100
+    }
+    if(keyCode === 38) {
+      camXYZ[2] -= speed / 100
+    }
+    if(keyCode === 40) {
+      camXYZ[2] += speed / 100
+    }
+  }
+}
+
+function mouseDragged() {
+  rotation[0] -= (mouseX - pmouseX) * sensi / 100;
+  rotation[1] += (mouseY - pmouseY) * sensi / 100;
+}
+
 function keyPressed() {
-   myText = myText + key;
-   storeItem('myText', myText);
- }
-  </pre>
- </body
+  if(keyCode === 83) {print(blockData)}
+}
+</script>
+
+</body>
 </html>
