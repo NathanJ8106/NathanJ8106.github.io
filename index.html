@@ -1,17 +1,58 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>3D Blocks</title>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      /*@font-face {
+        
+      }*/
+      #top-banner {
+        background-color: rgb(26, 26, 29);
+        width: 100%;
+        height: 75px;
+        top: 0%;
+      }
+      .top-banner-links {
+        width: auto;
+        height:75px;
+        padding-left: 25px;
+        padding-right: 25px;
+        background-color: rgb(45, 60, 66);
+        text-align: center;
+        color: white;
+        cursor: pointer;
+        display: table-cell;
+        vertical-align: middle;
+        font-size: 35px;
+        font-family: junegull;
+      }
+      #game-container {
+        width: auto;
+        height: auto;
+        margin-top: 20px;
+        margin-left: 20px;
+      }
+    </style>
+  </head>
+  <body style="margin: 0px; background-color: rgb(34, 38, 41);">
+    <header id="top-banner">
+      <a class="top-banner-links" href="https://www.google.com" style="text-decoration: none; color: white;" target="_blank" rel="noopener noreferrer">Games</a>
+      <a class="top-banner-links">Text</a>
+      <script>
+        var topBannerLinks = document.getElementsByClassName("top-banner-links")
+        var linkMouseOver1 = function() {
 
-</head>
-<body>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
-<script>
-	var rotation = [0, 0];
+        }
+      </script>
+    </header>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
+    <script>
+      var rotation = [0, 0];
 var camXYZ = [0, -10, 0]
 
+
 var blockSize = 100;
+cameraDistance = 500
 
 //colors
 var redCol = [255, 0, 0]
@@ -19,50 +60,60 @@ var blueCol = [0, 0, 255]
 var greenCol = [0, 255, 0]
 var yellowCol = [255, 255, 0]
 
-//x, y, z, color
-var blockData = [0, 1, 0, redCol, 1, 1, 0,greenCol, 0, 1, -1, blueCol, 1, 1, -1, yellowCol]
+//block, x, y, z
+var blockData = []
 
 //setup
 {
-  for(var n = -20; n < 20; n++) {
-    for(var i = -20; i < 20; i++) {
-      blockData[blockData.length] = n
-      blockData[blockData.length] = 0
-      blockData[blockData.length] = i
-      blockData[blockData.length] = greenCol
+  for(var i = -10; i < 10; i++) {
+    for(var n = -10; n < 10; n++) {
+      newBlock("grass", i, 0, n)
     }
   }
 }
 
+function newBlock(block, x, y, z) {
+  blockData[blockData.length] = block
+  blockData[blockData.length] = x
+  blockData[blockData.length] = y
+  blockData[blockData.length] = z
+}
+
 var speed = 20;
 var cameraDistance = 5
-var sensi = 60
+var sensi = 80
 
-function block(x, y, z, color) {
+
+
+function grass(x, y, z) {
   y *= -1
   x -= camXYZ[0]
   y -= camXYZ[1]
   z -= camXYZ[2]
       
-  fill(color)
+  push()
   translate(x * blockSize, y * blockSize, z * blockSize)
+  strokeWeight(1.5)
+  fill(153, 102, 51)
   box(blockSize)
-  translate(-x * blockSize, -y * blockSize, -z * blockSize)
+  fill(46, 184, 46)
+  translate(0, blockSize*3/-8, 0)
+  fill(0, 255, 0)
+  box(blockSize + 0.1, blockSize / 4 + 0.1, blockSize + 0.1)
+  pop()
 }
 
 function runSaveCode() {
-  for(var n = 0; n < blockData.length / 4; n++) {
-    var x = blockData[n * 4 + 0]
-    var y = blockData[n * 4 + 1]
-    var z = blockData[n * 4 + 2]
-    var color = blockData[n * 4 + 3]
-    block(x, y, z, color)
+  for(var n = 0; n < blockData.length; n += 4) {
+    if(blockData[n] === "grass") {
+      grass(blockData[n + 1], blockData[n + 2], blockData[n + 3])
+    }
   }
 }
 
 
 function setup() {
-  createCanvas(700, 700, WEBGL);
+  createCanvas(600, 600, WEBGL);
   angleMode(DEGREES);
   
   
@@ -104,7 +155,6 @@ function mouseDragged() {
 function keyPressed() {
   if(keyCode === 83) {print(blockData)}
 }
-</script>
-
-</body>
+    </script>
+  </body>
 </html>
