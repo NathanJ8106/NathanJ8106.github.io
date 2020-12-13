@@ -1,171 +1,35 @@
-let grassColor
-let appleCol
-let snakeCol
-var direction = 2
-var counterLimit = 3
-var counter = 0
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
 
-var canTurn = true
-var alive = true
-
-var xCor = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -6, -7, -8, -9]
-var yCor = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-
-function updatePos() {
-  for(var x = xCor.length - 1; x > 0; x--) {
-    xCor[x] = xCor[x - 1] 
-  }
-  for(var y = yCor.length - 1; y > 0; y--) {
-    yCor[y] = yCor[y - 1]
-  }
-  if(direction == 1) {
-    yCor[0] -= 1
-  }
-  if(direction == 2) {
-    xCor[0] += 1
-  }
-  if(direction == 3) {
-    yCor[0] += 1
-  }
-  if(direction == 4) {
-    xCor[0] -= 1
-  }
-}
-
-function checkForDeath() {
-  //wall collision
-  if(xCor[0] > 20 || xCor[0] < 1 || yCor[0] > 20 || yCor[0] < 1) {
-    alive = false
-  }
-  //crash into self
-  for(var e = 1; e < xCor.length; e++) {
-    if(xCor[0] == xCor[e] && yCor[0] == yCor[e]) {
-      alive = false
-    }
-  }
-}
-
-
+  </head>
+  <body style="margin: 0px; background-color: rgba(34, 38, 41, 0);">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
+    <script>// Type to change the letter in the
+ // center of the canvas.
+ // If you reload the page, it will
+ // still display the last key you entered
+let myText;
 function setup() {
-  createCanvas(600, 600);
-  
-  grassColor = [
-    color(50, 255, 0),
-    color(60, 238, 0)
-  ]
-  appleCol = color(255, 0, 0)
-  snakeCol = color(0, 0, 255)
-  frameRate(30)
-}
-
-function draw() {
-  background(0);
-  
-  noStroke()
-  
-  //draw background
-  for(var i = 0; i < 20; i += 2) {
-    fill(grassColor[0])
-    for(var n = 0; n < 20; n += 2) {
-      rect(30 * n, i * 30, 30, 30)
-    }
-    fill(grassColor[1])
-    for(n = 1; n < 20; n += 2) {
-      rect(30 * n, i * 30, 30, 30)
-    }
-    fill(grassColor[0])
-    for(n = 1; n < 20; n += 2) {
-      rect(30 * n, 30 + i * 30, 30, 30)
-    }
-    fill(grassColor[1])
-    for(n = 0; n < 20; n += 2) {
-      rect(30 * n, 30 + i * 30, 30, 30)
-    }
-  }
-  
-  //update snake position
-  if(counter <= counterLimit) {counter++} else {
-    if(alive == true) {
-      counter = 0
-      updatePos()
-      checkForDeath()
-      
-      canTurn = true
-    }
-  }
-  
-  
-  //draw snake
-  fill(snakeCol)
-  ellipseMode(CENTER)
-  for(var n = 0; n < xCor.length; n++) {
-    ellipse(xCor[n] * 30 - 15, yCor[n] * 30 - 15, 25, 25)
-  }
-  //rectangles to connect them
-  for(var t = 0; t < xCor.length; t++) {
-    //draw left rect
-    if(xCor[t] - 1 == xCor[t + 1] && yCor[t] == yCor[t + 1]) {
-      rect(xCor[t] * 30 - 30, yCor[t] * 30 - 30 + 2.5, 15, 25)
-    }
-    if(xCor[t] + 1 == xCor[t + 1] && yCor[t] == yCor[t - 1]) {
-      rect(xCor[t] * 30 - 30, yCor[t] * 30 - 30 + 2.5, 15, 25)
-    }
-    if(xCor[t] - 1 == xCor[t - 1] && yCor[t] == yCor[t - 1]) {
-      rect(xCor[t] * 30 - 30, yCor[t] * 30 - 30 + 2.5, 15, 25)
-    }
-    
-    //draw right rect
-    if(xCor[t] - 1 == xCor[t + 1] && yCor[t] == yCor[t - 1]) {
-      rect(xCor[t] * 30 - 15, yCor[t] * 30 - 30 + 2.5, 15, 25)
-    }
-    if(xCor[t] + 1 == xCor[t + 1] && yCor[t] == yCor[t + 1]) {
-      rect(xCor[t] * 30 - 15, yCor[t] * 30 - 30 + 2.5, 15, 25)
-    }
-    if(xCor[t] + 1 == xCor[t - 1] && yCor[t] == yCor[t - 1]) {
-      rect(xCor[t] * 30 - 15, yCor[t] * 30 - 30 + 2.5, 15, 25)
-    }
-    
-    //draw top rect
-    if(yCor[t] - 1 == yCor[t + 1] && xCor[t] == xCor[t + 1]) {
-      rect(xCor[t] * 30 - 30 + 2.5, yCor[t] * 30 - 30, 25, 15)
-    }
-    if(yCor[t] + 1 == yCor[t + 1] && xCor[t] == xCor[t - 1]) {
-      rect(xCor[t] * 30 - 30 + 2.5, yCor[t] * 30 - 30, 25, 15)
-    }
-    if(yCor[t] - 1 == yCor[t - 1] && xCor[t] == xCor[t - 1]) {
-      rect(xCor[t] * 30 - 30 + 2.5, yCor[t] * 30 - 30, 25, 15)
-    }
-    
-    //draw bottom rect
-    if(yCor[t] - 1 == yCor[t + 1] && xCor[t] == xCor[t - 1]) {
-      rect(xCor[t] * 30 - 30 + 2.5, yCor[t] * 30 - 15, 25, 15)
-    }
-    if(yCor[t] + 1 == yCor[t + 1] && xCor[t] == xCor[t + 1]) {
-      rect(xCor[t] * 30 - 30 + 2.5, yCor[t] * 30 - 15, 25, 15)
-    }
-    if(yCor[t] + 1 == yCor[t - 1] && xCor[t] == xCor[t - 1]) {
-      rect(xCor[t] * 30 - 30 + 2.5, yCor[t] * 30 - 15, 25, 15)
-    }
-  }
-}
-
-function keyPressed() {
-  if(keyCode == 39 && direction !== 4 && canTurn == true) {
-    direction = 2
-    canTurn = false
-  }
-  if(keyCode == 37 && direction !== 2 && canTurn == true) {
-    direction = 4
-    canTurn = false
-  }
-  if(keyCode == 38 && direction !== 3 && canTurn == true) {
-    direction = 1
-    canTurn = false
-  }
-  if(keyCode == 40 && direction !== 1 && canTurn == true) {
-    direction = 3
-    canTurn = false
-  }
-  if(direction == 0) direction = 4
-  if(direction == 5) direction = 1
-}
+   createCanvas(600, 600);
+   myText = getItem('myText');
+   if (myText === null) {
+     myText = '';
+   }
+ }
+      function draw() {
+   textSize(40);
+   background(255);
+  textAlign(CENTER, CENTER)
+   text(myText, width / 2, height / 2);
+ }
+ function keyPressed() {
+   myText = myText + key;
+   if(key === "c") {
+     myText = ''
+   }
+   storeItem('myText', myText);
+ }</script>
+  </body>
+</html>
