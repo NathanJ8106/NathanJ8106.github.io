@@ -46,115 +46,30 @@
       </script>
     </header>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
-    <script>
-      var rotation = [0, 0];
-var camXYZ = [0, -10, 0]
-
-
-var blockSize = 100;
-cameraDistance = 500
-
-//colors
-var redCol = [255, 0, 0]
-var blueCol = [0, 0, 255]
-var greenCol = [0, 255, 0]
-var yellowCol = [255, 255, 0]
-
-//block, x, y, z
-var blockData = []
-
-//setup
-{
-  for(var i = -10; i < 10; i++) {
-    for(var n = -10; n < 10; n++) {
-      newBlock("grass", i, 0, n)
-    }
-  }
-}
-
-function newBlock(block, x, y, z) {
-  blockData[blockData.length] = block
-  blockData[blockData.length] = x
-  blockData[blockData.length] = y
-  blockData[blockData.length] = z
-}
-
-var speed = 20;
-var cameraDistance = 5
-var sensi = 80
-
-
-
-function grass(x, y, z) {
-  y *= -1
-  x -= camXYZ[0]
-  y -= camXYZ[1]
-  z -= camXYZ[2]
-      
-  push()
-  translate(x * blockSize, y * blockSize, z * blockSize)
-  strokeWeight(1.5)
-  fill(153, 102, 51)
-  box(blockSize)
-  fill(46, 184, 46)
-  translate(0, blockSize*3/-8, 0)
-  fill(0, 255, 0)
-  box(blockSize + 0.1, blockSize / 4 + 0.1, blockSize + 0.1)
-  pop()
-}
-
-function runSaveCode() {
-  for(var n = 0; n < blockData.length; n += 4) {
-    if(blockData[n] === "grass") {
-      grass(blockData[n + 1], blockData[n + 2], blockData[n + 3])
-    }
-  }
-}
-
-
+    <script>// Type to change the letter in the
+ // center of the canvas.
+ // If you reload the page, it will
+ // still display the last key you entered
+let myText;
 function setup() {
-  createCanvas(600, 600, WEBGL);
-  angleMode(DEGREES);
-  
-  
-}
-
+   createCanvas(500, 500);
+   myText = getItem('myText');
+   if (myText === null) {
+     myText = '';
+   }
+ }
 function draw() {
-  translate(width/600, width/600)
-  background(185);
-  stroke(0, 0, 0)
-  
-  camera(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0)
-  
-  rotateX(rotation[1] / 2);
-  rotateY(rotation[0] / 2);
-  
-  runSaveCode()
-  
-  if(keyIsPressed) {
-    if(keyCode === 37) {
-      camXYZ[0] -= speed / 100
-    }
-    if(keyCode === 39) {
-      camXYZ[0] += speed / 100
-    }
-    if(keyCode === 38) {
-      camXYZ[2] -= speed / 100
-    }
-    if(keyCode === 40) {
-      camXYZ[2] += speed / 100
-    }
-  }
-}
-
-function mouseDragged() {
-  rotation[0] -= (mouseX - pmouseX) * sensi / 100;
-  rotation[1] += (mouseY - pmouseY) * sensi / 100;
-}
-
+   textSize(40);
+   background(255);
+  textAlign(CENTER, CENTER)
+   text(myText, width / 2, height / 2);
+ }
 function keyPressed() {
-  if(keyCode === 83) {print(blockData)}
-}
-    </script>
+   myText = myText + key;
+   if(key === "c") {
+     myText = ''
+   }
+   storeItem('myText', myText);
+ }</script>
   </body>
 </html>
