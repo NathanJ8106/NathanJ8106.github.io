@@ -1,35 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-
-  </head>
-  <body style="margin: 0px; background-color: rgba(34, 38, 41, 0);">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
-    <script>// Type to change the letter in the
- // center of the canvas.
- // If you reload the page, it will
- // still display the last key you entered
-let myText;
-function setup() {
-   createCanvas(600, 600);
-   myText = getItem('myText');
-   if (myText === null) {
-     myText = '';
-   }
- }
-      function draw() {
-   textSize(40);
-   background(255);
-  textAlign(CENTER, CENTER)
-   text(myText, width / 2, height / 2);
- }
- function keyPressed() {
-   myText = myText + key;
-   if(key === "c") {
-     myText = ''
-   }
-   storeItem('myText', myText);
- }</script>
-  </body>
+  <body>
+    <input id="input"></input>
+    <button id="button"></button>
+  </body
 </html>
